@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using ChatBot.Dialogs;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
@@ -19,7 +20,8 @@ namespace ChatBot
             if (activity.Type == ActivityTypes.Message)
             {
                 //await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
-                await Conversation.SendAsync(activity, () => new Dialogs.GreetingDialog());
+                //await Conversation.SendAsync(activity, () => new Dialogs.GreetingDialog());
+                await Conversation.SendAsync(activity, () => FurnitureServiceBotDialog.Dialog);
             }
             else
             {

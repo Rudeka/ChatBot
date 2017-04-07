@@ -12,7 +12,24 @@ namespace ChatBot.Dialogs
         {
             context.UserData.Clear();
             await context.PostAsync("Hi I'm mebel and decor Chat Bot");
+            await Respond(context);
+
             context.Wait(MessageReceivedAsync);
+        }
+
+        private static async Task Respond(IDialogContext context)
+        {
+            string userName;
+            context.UserData.TryGetValue<string>("Name", out userName);
+            if (string.IsNullOrEmpty(userName))
+            {
+                await context.PostAsync("What is your name?");
+                context.UserData.SetValue<bool>("GetName", true);
+            }
+            else
+            {
+                await context.PostAsync($"Hi {userName}. How can I help you today?");
+            }
         }
 
         public virtual async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
@@ -30,17 +47,8 @@ namespace ChatBot.Dialogs
                 context.UserData.SetValue<bool>("GetName", false);
             }
 
-            if (string.IsNullOrEmpty(userName))
-            {
-                await context.PostAsync("What is your name?");
-                context.UserData.SetValue<bool>("GetName", true);
-            }
-            else
-            {
-                await context.PostAsync($"Hi {userName}. How can I help you today?");
-            }
-
-            context.Wait(MessageReceivedAsync);
+            await Respond(context);
+            context.Done(message);
         }
     }
 }
