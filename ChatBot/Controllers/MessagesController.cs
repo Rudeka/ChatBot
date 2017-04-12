@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using ChatBot.Dialogs;
+using ChatBot.Models;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
@@ -21,7 +22,8 @@ namespace ChatBot
             {
                 //await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
                 //await Conversation.SendAsync(activity, () => new Dialogs.GreetingDialog());
-                await Conversation.SendAsync(activity, () => FurnitureServiceBotDialog.Dialog);
+                //await Conversation.SendAsync(activity, () => FurnitureServiceBotDialog.Dialog);
+                await Conversation.SendAsync(activity, MakeLuisDialog);
             }
             else
             {
@@ -29,6 +31,11 @@ namespace ChatBot
             }
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
+        }
+
+        private IDialog<ItemReservation> MakeLuisDialog()
+        {
+            return Chain.From(() => new LUISDialog(ItemReservation.BuildForm));
         }
 
         private Activity HandleSystemMessage(Activity message)
