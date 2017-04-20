@@ -26,7 +26,7 @@ namespace ChatBot.Models
         public ItemOptions? Item;
         public int? NumberOfItems;
         public DateTime? DueDate;
-        public List<Services> Serviceses;
+        public List<Services> Services;
 
         public static IForm<ItemReservation> BuildForm()
         {
